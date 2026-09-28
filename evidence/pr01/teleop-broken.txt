@@ -1,0 +1,6 @@
+Reading from keyboard
+---------------------------
+Use arrow keys to move the turtle.
+Use g|b|v|c|d|e|r|t keys to rotate to absolute orientations. 'f' to cancel a rotation.
+'q' to quit.
+[ros2run]: Received signal:  Interrupt

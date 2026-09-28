@@ -1,0 +1,5 @@
+[INFO] [1790613517.230741813] [turtlesim]: Starting turtlesim with node name /turtlesim
+[INFO] [1790613517.236838108] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[ros2run]: Received signal:  Interrupt
+[INFO] [1790613577.575251609] [rclcpp]: signal_handler(signum=2)
+[INFO] [1790613577.576601001] [rclcpp]: signal_handler(signum=2)

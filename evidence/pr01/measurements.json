@@ -1,0 +1,81 @@
+{
+  "experiment_completed": true,
+  "execution": "native ROS 2; Qt offscreen simulator; actual arrow-up input through PTY",
+  "pose_type": "turtlesim_msgs/msg/Pose",
+  "frequency": {
+    "command_duration_seconds": 15,
+    "last_average_hz": 62.497,
+    "samples": [
+      62.466,
+      62.489,
+      62.49,
+      62.493,
+      62.494,
+      62.493,
+      62.495,
+      62.499,
+      62.5,
+      62.499,
+      62.499,
+      62.499,
+      62.497
+    ]
+  },
+  "baseline": {
+    "domain": 16,
+    "before": {
+      "x": 5.544444561004639,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after_arrow": {
+      "x": 7.560444355010986,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "movement_distance": 2.0159997940063477
+  },
+  "broken": {
+    "simulator_domain": 16,
+    "teleop_and_observer_domain": 17,
+    "echo_exit": 124,
+    "before_arrow_in_domain16": {
+      "x": 7.560444355010986,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after_arrow_in_domain16": {
+      "x": 7.560444355010986,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "movement_distance": 0.0
+  },
+  "fixed": {
+    "domain": 16,
+    "echo_exit": 0,
+    "before_arrow": {
+      "x": 7.560444355010986,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after_arrow": {
+      "x": 9.576444625854492,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "movement_distance": 2.016000270843506
+  }
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "domain": 16,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-initial-16.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.78
+  },
+  {
+    "domain": 17,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-initial-17.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.773
+  },
+  {
+    "domain": 16,
+    "command": "QT_QPA_PLATFORM=offscreen ros2 run turtlesim turtlesim_node",
+    "output": "simulator.txt"
+  },
+  {
+    "domain": 16,
+    "command": "ros2 run turtlesim turtle_teleop_key",
+    "output": "teleop-before.txt",
+    "input": "real PTY; arrow-up escape sequence"
+  },
+  {
+    "domain": 16,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-before.txt",
+    "exit_code": 0,
+    "duration_seconds": 3.117
+  },
+  {
+    "domain": 16,
+    "command": "ros2 topic list -t --no-daemon --spin-time 2",
+    "output": "topics-before.txt",
+    "exit_code": 0,
+    "duration_seconds": 3.162
+  },
+  {
+    "domain": 16,
+    "command": "ros2 node info /turtlesim --no-daemon --spin-time 2",
+    "output": "turtlesim-info.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.777
+  },
+  {
+    "domain": 16,
+    "command": "ros2 node info /teleop_turtle --no-daemon --spin-time 2",
+    "output": "teleop-info.txt",
+    "exit_code": 0,
+    "duration_seconds": 3.154
+  },
+  {
+    "domain": 16,
+    "command": "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "output": "pose-type.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.759
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-before.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.314
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-key-before.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.291
+  },
+  {
+    "domain": 16,
+    "command": "timeout --signal=INT 15s ros2 topic hz /turtle1/pose",
+    "output": "pose-hz.txt",
+    "exit_code": 124,
+    "duration_seconds": 15.323
+  },
+  {
+    "domain": 17,
+    "command": "ros2 run turtlesim turtle_teleop_key",
+    "output": "teleop-broken.txt",
+    "input": "real PTY; arrow-up escape sequence"
+  },
+  {
+    "domain": 17,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-broken.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.778
+  },
+  {
+    "domain": 17,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-broken.txt",
+    "exit_code": 124,
+    "duration_seconds": 5.218
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-observed-before-broken-key.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.32
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-observed-after-broken-key.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.289
+  },
+  {
+    "domain": 16,
+    "command": "ros2 run turtlesim turtle_teleop_key",
+    "output": "teleop-fixed.txt",
+    "input": "real PTY; arrow-up escape sequence"
+  },
+  {
+    "domain": 16,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-fixed.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.758
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-fixed.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.308
+  },
+  {
+    "domain": 16,
+    "command": "timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-key-fixed.txt",
+    "exit_code": 0,
+    "duration_seconds": 1.341
+  },
+  {
+    "domain": 16,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-cleanup-16.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.746
+  },
+  {
+    "domain": 17,
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-cleanup-17.txt",
+    "exit_code": 0,
+    "duration_seconds": 2.805
+  }
+]

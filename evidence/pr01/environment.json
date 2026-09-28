@@ -1,0 +1,26 @@
+{
+  "launch_method": "native",
+  "os": {
+    "name": "Ubuntu",
+    "version": "26.04.1 LTS"
+  },
+  "ros_distribution": "lyrical",
+  "rmw_implementation": "rmw_fastrtps_cpp",
+  "gazebo": {
+    "version": null,
+    "gz_cli_available": false
+  },
+  "ros_domain_ids": {
+    "simulator": 16,
+    "teleop_before": 16,
+    "teleop_broken": 17,
+    "teleop_fixed": 16,
+    "observer_before": 16,
+    "observer_broken": 17,
+    "observer_fixed": 16
+  },
+  "experiment_completed": true,
+  "notes": "Опыт выполнен агентом реальными ROS-нодами без окна. Результаты сохранены в measurements.json и graph.md; ручная демонстрация студентом ещё не выполнена. Gazebo CLI gz отсутствует; версия Gazebo не определена, Gazebo в опыте не использовался.",
+  "simulator_rendering": "Qt offscreen",
+  "teleop_input": "Arrow-up escape sequence sent to actual turtle_teleop_key via PTY"
+}

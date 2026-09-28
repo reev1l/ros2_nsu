@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR01",
+  "commit": "f5ed1e53b49173b25f4bcf986f5717e9bf8ef848",
+  "course_kit": {
+    "version": "v1-w04",
+    "archive_sha256": "fec6b4e886c19146078bf69fbf90a19279a4cd33f656642395350b299efeb226"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash",
+    "ROS_DOMAIN_ID=16 ROS_LOG_DIR=/tmp/ros-pr01-logs timeout 40s ros2 doctor --report",
+    "python3 scripts/run_pr01.py",
+    "ROS_DOMAIN_ID=16 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=17 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 QT_QPA_PLATFORM=offscreen ros2 run turtlesim turtlesim_node",
+    "ROS_DOMAIN_ID=16 ros2 run turtlesim turtle_teleop_key",
+    "ROS_DOMAIN_ID=16 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 ros2 topic list -t --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 ros2 node info /turtlesim --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 ros2 node info /teleop_turtle --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 timeout --signal=INT 15s ros2 topic hz /turtle1/pose",
+    "ROS_DOMAIN_ID=17 ros2 run turtlesim turtle_teleop_key",
+    "ROS_DOMAIN_ID=17 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=17 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 ros2 run turtlesim turtle_teleop_key",
+    "ROS_DOMAIN_ID=16 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ROS_DOMAIN_ID=16 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=17 ros2 node list --no-daemon --spin-time 2"
+  ],
+  "tests": [
+    {
+      "name": "Обнаружение /turtlesim и /teleop_turtle в домене 16, топики и тип Pose",
+      "status": "passed",
+      "evidence": [
+        "nodes-before.txt",
+        "topics-before.txt",
+        "pose-type.txt",
+        "turtlesim-info.txt",
+        "teleop-info.txt"
+      ]
+    },
+    {
+      "name": "Управление реальным teleop через стрелку: движение в домене 16",
+      "status": "passed",
+      "evidence": [
+        "pose-before.txt",
+        "pose-after-key-before.txt"
+      ]
+    },
+    {
+      "name": "Замер частоты позы: 15 секунд, последнее среднее 62.497 Гц",
+      "status": "passed",
+      "evidence": [
+        "pose-hz.txt"
+      ]
+    },
+    {
+      "name": "Разрыв доменов: в 17 только teleop, echo timeout 124, от стрелки движения нет",
+      "status": "passed",
+      "evidence": [
+        "nodes-broken.txt",
+        "pose-broken.txt.exit.txt",
+        "pose-observed-before-broken-key.txt",
+        "pose-observed-after-broken-key.txt"
+      ]
+    },
+    {
+      "name": "Восстановление: в 16 обе ноды, echo exit 0, движение от стрелки восстановилось",
+      "status": "passed",
+      "evidence": [
+        "nodes-fixed.txt",
+        "pose-fixed.txt",
+        "pose-fixed.txt.exit.txt",
+        "pose-after-key-fixed.txt"
+      ]
+    },
+    {
+      "name": "После опыта созданные процессы остановлены, домены 16 и 17 пусты",
+      "status": "passed",
+      "evidence": [
+        "nodes-cleanup-16.txt",
+        "nodes-cleanup-17.txt"
+      ]
+    }
+  ],
+  "defect": {
+    "reproducer": "Симулятор оставлен в ROS_DOMAIN_ID=16. Teleop остановлен и запущен в 17; CLI-наблюдатель тоже запущен в 17. timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon завершился с кодом 124, поза не пришла. Стрелка в teleop не изменила координаты симулятора.",
+    "root_cause": "ROS_DOMAIN_ID задаёт область обнаружения DDS-участников при запуске. Участники 16 и 17 не обнаруживают друг друга. export меняет окружение новых процессов, а не уже запущенный teleop; установка ROS и тип Pose исправны.",
+    "proof_after": "Teleop остановлен и снова запущен с ROS_DOMAIN_ID=16; наблюдатель возвращён в 16. Та же команда echo получила позу и завершилась с кодом 0, node list обнаружил обе ноды, а стрелка изменила x с 7.560444355010986 на 9.576444625854492. Симулятор не перезапускался."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2,
+    "basis": "Норматив из условия: одна лабораторная пара и примерно 2 часа самостоятельной доработки. Это не заявление о фактическом посещении или затратах времени студентом."
+  },
+  "ai_used": true,
+  "execution": {
+    "performed_by": "Codex agent (GPT-6)",
+    "simulator": "Installed turtlesim_node with QT_QPA_PLATFORM=offscreen",
+    "input": "Arrow-up bytes sent to installed turtle_teleop_key via PTY",
+    "manual_student_demonstration_completed": false,
+    "gazebo": "gz CLI unavailable; not used in this turtlesim experiment"
+  }
+}
