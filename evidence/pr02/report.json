@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR02",
+  "commit": "a7e0a189e5e8a5d542740815230a680c80cf7867",
+  "course_kit": {
+    "version": "v1-w05",
+    "archive_sha256": "bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash",
+    "ros2 pkg create --build-type ament_python --license Apache-2.0 turtle_bringup --dependencies launch launch_ros turtlesim",
+    "colcon build --symlink-install --packages-select turtle_bringup 2>&1 | tee evidence/pr02/build-empty.txt",
+    "colcon build --symlink-install --packages-select turtle_bringup 2>&1 | tee evidence/pr02/build.txt",
+    "source install/setup.bash",
+    "ros2 pkg prefix turtle_bringup",
+    "python3 -m py_compile src/turtle_bringup/launch/sim.launch.py",
+    "ROS_DOMAIN_ID=17 python3 scripts/run_pr02.py",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 interface show geometry_msgs/msg/Twist",
+    "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'"
+  ],
+  "tests": [
+    {
+      "name": "Пустой пакет и пакет с установленным launch-файлом собраны отдельно",
+      "status": "passed",
+      "evidence": ["build-empty.txt", "build.txt", "package-prefix.txt"]
+    },
+    {
+      "name": "Launch запустил /turtlesim и остановил ноду по SIGINT",
+      "status": "passed",
+      "evidence": ["launch-first.txt", "nodes-first.txt", "nodes-after-first-stop.txt"]
+    },
+    {
+      "name": "Однократная команда на /turtle1/cmd_vel сдвинула черепаху",
+      "status": "passed",
+      "evidence": ["pub-once.txt", "pose-before.txt", "pose-after-once.txt", "measurements.json"]
+    },
+    {
+      "name": "На /cmd_vel виден издатель без подписчика; поза не изменилась",
+      "status": "passed",
+      "evidence": ["pub-broken.txt", "info-broken.txt", "info-correct-during-broken.txt", "pose-before-broken.txt", "pose-after-broken.txt"]
+    },
+    {
+      "name": "После исправления только имени на /turtle1/cmd_vel есть издатель и подписчик; поза изменилась",
+      "status": "passed",
+      "evidence": ["pub-fixed.txt", "info-fixed.txt", "pose-before-fixed.txt", "pose-after-fixed.txt"]
+    },
+    {
+      "name": "После опыта в домене 17 не осталось нод; launch синтаксически корректен",
+      "status": "passed",
+      "evidence": ["nodes-final.txt", "launch-experiment.txt"]
+    }
+  ],
+  "defect": {
+    "reproducer": "При работающем turtlesim в домене 17 выполнена непрерывная публикация Twist с linear.x=1.0 и angular.z=0.5 в /cmd_vel: ros2 topic info /cmd_vel --verbose показал 1 издателя и 0 подписчиков, а поза осталась (6.509309, 5.796991, 0.504).",
+    "root_cause": "Симулятор подписан на полное имя /turtle1/cmd_vel. /cmd_vel — отдельный топик; совпадение типа geometry_msgs/msg/Twist не связывает разные имена. Издатель был обнаружен в графе, но доставки к turtlesim не было.",
+    "proof_after": "Та же непрерывная команда с тем же Twist и доменом 17, но с именем /turtle1/cmd_vel, дала 1 издателя и 1 подписчика /turtlesim; поза изменилась с (6.509309, 5.796991, 0.504) до (6.857611, 9.045947, 2.416)."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2,
+    "basis": "Норматив из условия: одна лабораторная пара и примерно 2 часа самостоятельной доработки; это не заявление о фактически затраченном времени."
+  },
+  "ai_used": true,
+  "execution": {
+    "performed_by": "Codex agent (GPT-6)",
+    "simulator": "Installed turtlesim_node launched via turtle_bringup with QT_QPA_PLATFORM=offscreen",
+    "manual_student_demonstration_completed": false
+  }
+}

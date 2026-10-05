@@ -1,0 +1,56 @@
+{
+  "domain": 17,
+  "launch_file": "/home/reev/Desktop/ROS2/install/turtle_bringup/share/turtle_bringup/launch/sim.launch.py",
+  "pose_type": "turtlesim_msgs/msg/Pose",
+  "once": {
+    "before": {
+      "x": 5.544444561004639,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after": {
+      "x": 6.509308815002441,
+      "y": 5.796990871429443,
+      "theta": 0.5040000081062317,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "distance": 0.9973678697210564
+  },
+  "broken": {
+    "before": {
+      "x": 6.509308815002441,
+      "y": 5.796990871429443,
+      "theta": 0.5040000081062317,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after": {
+      "x": 6.509308815002441,
+      "y": 5.796990871429443,
+      "theta": 0.5040000081062317,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "distance": 0.0
+  },
+  "fixed": {
+    "before": {
+      "x": 6.509308815002441,
+      "y": 5.796990871429443,
+      "theta": 0.5040000081062317,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after": {
+      "x": 6.857610702514648,
+      "y": 9.045947074890137,
+      "theta": 2.4159998893737793,
+      "linear_velocity": 1.0,
+      "angular_velocity": 0.5
+    },
+    "distance": 3.2675725878471757
+  }
+}
