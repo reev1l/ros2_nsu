@@ -170,6 +170,10 @@ def main() -> None:
                 raise RuntimeError("Turtle did not move after correcting only the name")
         finally:
             stop(fixed)
+        time.sleep(1.5)
+        stopped = pose("pose-after-fixed-stop.txt", pose_type)
+        if abs(stopped["linear_velocity"]) > 0.001 or abs(stopped["angular_velocity"]) > 0.001:
+            raise RuntimeError("Turtle did not stop after the publisher was stopped")
     finally:
         stop(launch)
         for process in reversed(PROCESSES):
@@ -187,6 +191,7 @@ def main() -> None:
                    "distance": distance(wrong_before, wrong_after)},
         "fixed": {"before": fixed_before, "after": fixed_after,
                   "distance": distance(fixed_before, fixed_after)},
+        "after_publisher_stop": stopped,
     }
     (EVIDENCE / "measurements.json").write_text(json.dumps(measurements, indent=2) + "\n")
     (EVIDENCE / "commands.json").write_text(json.dumps(COMMANDS, indent=2) + "\n")
