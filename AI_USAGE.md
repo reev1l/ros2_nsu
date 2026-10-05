@@ -4,4 +4,4 @@
 
 ai_used: true.
 
-GPT-6-Sol high: Помощь в правильной установке ROS2 и окружения, настройка CI через GitHub Actions, оформление README.md
+GPT-6-Sol high: Помощь в правильной установке ROS2 и окружения, работа с Course Kit, настройка CI через GitHub Actions, оформление README.md
