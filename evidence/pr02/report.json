@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR02",
-  "commit": "a7e0a189e5e8a5d542740815230a680c80cf7867",
+  "commit": "a6368e66a951447beb8723a4f23e91912b390a0c",
   "course_kit": {
     "version": "v1-w05",
     "archive_sha256": "bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197"
@@ -52,6 +52,11 @@
       "evidence": ["pub-fixed.txt", "info-fixed.txt", "pose-before-fixed.txt", "pose-after-fixed.txt"]
     },
     {
+      "name": "Черепаха остановилась после завершения издателя и ожидания 1,5 секунды",
+      "status": "passed",
+      "evidence": ["pose-after-fixed-stop.txt", "measurements.json"]
+    },
+    {
       "name": "После опыта в домене 17 не осталось нод; launch синтаксически корректен",
       "status": "passed",
       "evidence": ["nodes-final.txt", "launch-experiment.txt"]
@@ -60,7 +65,7 @@
   "defect": {
     "reproducer": "При работающем turtlesim в домене 17 выполнена непрерывная публикация Twist с linear.x=1.0 и angular.z=0.5 в /cmd_vel: ros2 topic info /cmd_vel --verbose показал 1 издателя и 0 подписчиков, а поза осталась (6.509309, 5.796991, 0.504).",
     "root_cause": "Симулятор подписан на полное имя /turtle1/cmd_vel. /cmd_vel — отдельный топик; совпадение типа geometry_msgs/msg/Twist не связывает разные имена. Издатель был обнаружен в графе, но доставки к turtlesim не было.",
-    "proof_after": "Та же непрерывная команда с тем же Twist и доменом 17, но с именем /turtle1/cmd_vel, дала 1 издателя и 1 подписчика /turtlesim; поза изменилась с (6.509309, 5.796991, 0.504) до (6.857611, 9.045947, 2.416)."
+    "proof_after": "Та же непрерывная команда с тем же Twist и доменом 17, но с именем /turtle1/cmd_vel, дала 1 издателя и 1 подписчика /turtlesim; поза изменилась с (6.509309, 5.796991, 0.504) до (6.601517, 9.237254, 2.576). После остановки издателя и ожидания 1,5 секунды обе скорости стали нулевыми."
   },
   "claims": {
     "public_tests_passed": true,

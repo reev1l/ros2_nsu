@@ -2,12 +2,12 @@ Type: geometry_msgs/msg/Twist
 
 Publisher count: 1
 
-Node name: _ros2cli_15836
+Node name: _ros2cli_22131
 Node namespace: /
 Topic type: geometry_msgs/msg/Twist
 Topic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a
 Endpoint type: PUBLISHER
-GID: 01.0f.83.31.dc.3d.a5.9f.00.00.00.00.00.00.07.03
+GID: 01.0f.83.31.73.56.a0.75.00.00.00.00.00.00.07.03
 QoS profile:
   Reliability: RELIABLE
   History (Depth): KEEP_LAST (10)
@@ -24,7 +24,7 @@ Node namespace: /
 Topic type: geometry_msgs/msg/Twist
 Topic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a
 Endpoint type: SUBSCRIPTION
-GID: 01.0f.83.31.b9.3c.8d.a4.00.00.00.00.00.00.1c.04
+GID: 01.0f.83.31.54.55.ce.23.00.00.00.00.00.00.1c.04
 QoS profile:
   Reliability: RELIABLE
   History (Depth): KEEP_LAST (7)

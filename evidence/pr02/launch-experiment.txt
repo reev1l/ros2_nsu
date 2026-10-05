@@ -1,10 +1,10 @@
-[INFO] [launch]: All log files can be found below /tmp/ros-pr02-logs/2026-10-05-15-10-56-086083-terminal-15525
+[INFO] [launch]: All log files can be found below /tmp/ros-pr02-logs/2026-10-05-15-46-45-783075-terminal-21824
 [INFO] [launch]: Default logging verbosity is set to INFO
-[INFO] [turtlesim_node-1]: process started with pid [15545]
-[turtlesim_node-1] [INFO] [1791187856.210069960] [turtlesim]: Starting turtlesim with node name /turtlesim
-[turtlesim_node-1] [INFO] [1791187856.216282206] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[INFO] [turtlesim_node-1]: process started with pid [21844]
+[turtlesim_node-1] [INFO] [1791190005.919414624] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1791190005.925502440] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
 [WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
 [INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
-[turtlesim_node-1] [INFO] [1791187880.441131887] [rclcpp]: signal_handler(signum=2)
-[turtlesim_node-1] [INFO] [1791187880.444048737] [rclcpp]: signal_handler(signum=2)
-[INFO] [turtlesim_node-1]: process has finished cleanly [pid 15545]
+[turtlesim_node-1] [INFO] [1791190032.604724813] [rclcpp]: signal_handler(signum=2)
+[turtlesim_node-1] [INFO] [1791190032.607922627] [rclcpp]: signal_handler(signum=2)
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 21844]

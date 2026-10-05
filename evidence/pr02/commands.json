@@ -17,7 +17,7 @@
   {
     "command": "ros2 launch turtle_bringup sim.launch.py",
     "output": "launch-first.txt",
-    "pid": 15440
+    "pid": 21722
   },
   {
     "command": "ros2 node list --no-daemon --spin-time 2",
@@ -32,7 +32,7 @@
   {
     "command": "ros2 launch turtle_bringup sim.launch.py",
     "output": "launch-experiment.txt",
-    "pid": 15525
+    "pid": 21824
   },
   {
     "command": "ros2 node list --no-daemon --spin-time 2",
@@ -62,7 +62,7 @@
   {
     "command": "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
     "output": "pub-broken.txt",
-    "pid": 15693
+    "pid": 21987
   },
   {
     "command": "ros2 topic info /cmd_vel --verbose",
@@ -87,7 +87,7 @@
   {
     "command": "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
     "output": "pub-fixed.txt",
-    "pid": 15836
+    "pid": 22131
   },
   {
     "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
@@ -102,6 +102,11 @@
   {
     "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
     "output": "pose-after-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-fixed-stop.txt",
     "exit_code": 0
   },
   {
