@@ -1,6 +1,28 @@
-# ros2_nsu — ПР01: окружение и граф ROS 2
+# ros2_nsu — практические работы по ROS 2
 
-[Условие ПР01](https://ros.lms.ci.nsu.ru/practices/pr01) · [Порядок сдачи](https://ros.lms.ci.nsu.ru/practices/runbook) · [Комплект курса](COURSE_KIT.md)
+[Условие ПР01](https://ros.lms.ci.nsu.ru/practices/pr01) · [Порядок сдачи](https://ros.lms.ci.nsu.ru/practices/runbook) · [Комплект курса](https://ros.lms.ci.nsu.ru/course/course-kit)
+
+## ПР02: пакет запуска и имя топика
+
+[Условие ПР02](https://ros.lms.ci.nsu.ru/practices/pr02) · [Команды и измерения](evidence/pr02/commands.md) · [Типы сообщений](evidence/pr02/types.md)
+
+Пакет `src/turtle_bringup` устанавливает `sim.launch.py`, который запускает готовую ноду `turtlesim_node`. Собственных ROS-нод в ПР02 нет. Пустой пакет и пакет с launch-файлом собраны отдельно; выводы — `evidence/pr02/build-empty.txt` и `build.txt`. В установленном каталоге launch-файл обнаружен через `ros2 pkg prefix turtle_bringup`.
+
+Повторить автоматический опыт с настоящими ROS-нодами:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup
+source install/setup.bash
+export ROS_DOMAIN_ID=17 # выберите свободный домен
+python3 scripts/run_pr02.py
+```
+
+Скрипт проверяет запуск и остановку launch, одинарную команду движения, ошибочную публикацию в `/cmd_vel` и исправленную публикацию в `/turtle1/cmd_vel`. Симулятор работает с `QT_QPA_PLATFORM=offscreen`; сохранённые измерения получены от установленного `turtlesim`, но ручную демонстрацию с окном студенту ещё предстоит повторить. В выполненном опыте домен 16 был занят чужими нодами, поэтому использован свободный домен 17.
+
+Для ручной демонстрации запустите `ros2 launch turtle_bringup sim.launch.py` в терминале A, подключив ROS и workspace. В B с тем же доменом отправьте `ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'`. Затем запустите `ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'` и сравните `ros2 topic info /cmd_vel --verbose` с `ros2 topic info /turtle1/cmd_vel --verbose`. Остановите издателя через Ctrl+C, исправьте только имя топика и повторите. В конце остановите launch через Ctrl+C.
+
+## ПР01: окружение и граф ROS 2
 
 Проверенная среда: Ubuntu 26.04.1, нативный ROS 2 Lyrical, `rmw_fastrtps_cpp`, `turtlesim` 1.10.9. `gz` не найден; версия Gazebo пока не определена. Домен исправного графа — 16, домен разрыва — 17.
 
@@ -145,10 +167,10 @@ printf 'exit=%s\n' "$result" | tee evidence/pr01/pose-fixed-exit.txt
 
 ## 6. Проверить и сдать два коммита
 
-Workflow `.github/workflows/ci.yml` проверяет JSON и evidence, используя зафиксированный course kit. Живой опыт выполняется локально; собственных нод и `colcon` в ПР01 нет.
+На коммите сдачи ПР01 workflow проверял JSON и evidence с зафиксированным course kit. Текущий workflow проверяет ПР02. Живой опыт выполняется локально; собственных нод и `colcon` в ПР01 нет.
 
 1. Завершить файлы реализации: README, CI, `.gitignore`, инструкцию комплекта. Зафиксировать их коммитом **A**, исключив `evidence/` и `AI_USAGE.md`.
-2. В `evidence/pr01/report.json` записать полный SHA(A), `course_kit.version = v1-w04` и SHA-256 из `COURSE_KIT.md`. Заполнить остальные поля шаблона.
+2. В `evidence/pr01/report.json` записать полный SHA(A), `course_kit.version = v1-w04` и SHA-256 архива этой ревизии. Заполнить остальные поля шаблона.
 3. Выполнить:
 
    ```bash

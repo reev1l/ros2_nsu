@@ -1,4 +1,4 @@
-name: PR01 evidence
+name: PR02 launch and evidence
 
 on: [push, pull_request]
 
@@ -6,30 +6,37 @@ permissions:
   contents: read
 
 env:
-  COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w04-fec6b4e886c1.tar.gz
-  COURSE_KIT_SHA256: fec6b4e886c19146078bf69fbf90a19279a4cd33f656642395350b299efeb226
+  COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w05-bca214e3de6f.tar.gz
+  COURSE_KIT_SHA256: bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197
 
 jobs:
-  evidence:
+  pr02:
     runs-on: ubuntu-latest
+    container:
+      image: osrf/ros:jazzy-desktop-full@sha256:d16957210572c5f919f3f9bd2fb0cc24a82542647489d8b8eda7c3beda31305f
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Validate environment JSON
+      - name: Build PR02 launch package
         shell: bash
-        run: python3 -m json.tool evidence/pr01/environment.json > /dev/null
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --symlink-install --packages-select turtle_bringup
+          source install/setup.bash
+          test -f "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch/sim.launch.py"
+          python3 -m py_compile src/turtle_bringup/launch/sim.launch.py
 
       - name: Download pinned course kit
         shell: bash
         run: |
-          kit_archive="$RUNNER_TEMP/pr01-course-kit.tar.gz"
+          kit_archive="$RUNNER_TEMP/pr02-course-kit.tar.gz"
           curl -fsSLo "$kit_archive" "$COURSE_KIT_URL"
           printf '%s  %s\n' "$COURSE_KIT_SHA256" "$kit_archive" | sha256sum -c -
           mkdir -p .course-kit
           tar -xzf "$kit_archive" -C .course-kit
 
-      - name: Check PR01 evidence
+      - name: Check PR02 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR01 --submission .
+        run: python3 .course-kit/v1/tools/check_practice.py PR02 --submission .
