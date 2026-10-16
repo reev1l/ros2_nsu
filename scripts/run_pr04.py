@@ -67,7 +67,8 @@ def start(args: list[str], filename: str) -> subprocess.Popen:
 def stop(process: subprocess.Popen) -> None:
     if process.poll() is not None:
         return
-    os.killpg(process.pid, signal.SIGINT)
+    # ros2 run/launch forwards SIGINT; signal only the wrapper once.
+    process.send_signal(signal.SIGINT)
     try:
         process.wait(timeout=8)
     except subprocess.TimeoutExpired:
@@ -156,6 +157,7 @@ def main() -> None:
         actions = run(["ros2", "action", "list", "-t"], "actions.txt")
         assert "/turtle1/rotate_absolute" in actions
         stop(patrol)
+        assert patrol.returncode == 0, "Patrol did not shut down cleanly"
         time.sleep(1.5)
         stopped = pose("pose-after-stop.txt", pose_type)
         assert stopped['linear_velocity'] == stopped['angular_velocity'] == 0.
@@ -180,7 +182,8 @@ def main() -> None:
             assert "ZeroDivisionError" in log and defect.returncode != 0
             measurements["defect"] = {"process_exit_code": defect.returncode,
                                        "parameter_command_exit_code": result.returncode,
-                                       "failure": "ZeroDivisionError: float division by zero"}
+                                       "failure": next(line for line in log.splitlines()
+                                                       if line.startswith("ZeroDivisionError:"))}
         stop(simulator)
         assert not nodes("nodes-final.txt")
         (EVIDENCE / "measurements.json").write_text(json.dumps(measurements, indent=2) + "\n")
