@@ -28,3 +28,8 @@ def test_commands_are_independent():
     command.linear.x = 9.
     assert fields(command_from_pose(None)) == (0., 0., 0., 0., 0., 0.)
     assert command_from_pose(Pose()).linear.x == 0.5
+
+
+def test_configured_command_and_stop():
+    assert fields(command_from_pose(Pose(), 0.2, -0.4)) == (0.2, 0., 0., 0., 0., -0.4)
+    assert fields(command_from_pose(None, 0.2, -0.4)) == (0., 0., 0., 0., 0., 0.)

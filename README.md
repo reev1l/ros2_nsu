@@ -2,6 +2,34 @@
 
 [Условие ПР01](https://ros.lms.ci.nsu.ru/practices/pr01) · [Порядок сдачи](https://ros.lms.ci.nsu.ru/practices/runbook) · [Комплект курса](https://ros.lms.ci.nsu.ru/course/course-kit)
 
+## ПР04: параметры движения
+
+[Условие ПР04](https://ros.lms.ci.nsu.ru/practices/pr04) · [Команды и результаты](evidence/pr04/parameters.md) · [Тесты](evidence/pr04/tests.txt)
+
+Нода `patrol` из ПР03 дополнена параметрами `linear_speed=0.5`, `turn_rate=0.3`,
+`publish_hz=10.0`. Допустимы конечные значения в диапазонах [0, 1], [-1, 1]
+и [1, 30]. Чистая функция проверяет всю предлагаемую конфигурацию.
+Callback проверки не изменяет активное состояние; после успешного применения
+новых параметров нода обновляет команду и при смене частоты заменяет таймер.
+Предыдущий таймер остановлен и уничтожен. ПР03 с параметрами по умолчанию
+сохраняет прежнее поведение.
+
+```bash
+source /opt/ros/lyrical/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup patrol
+source install/setup.bash
+ROS_DOMAIN_ID=19 python3 -m pytest src/patrol/test
+ROS_DOMAIN_ID=19 python3 scripts/run_pr04.py
+python3 .course-kit/v1/tools/check_practice.py PR04 --submission .
+```
+
+Скрипт проверяет поток 10 Гц, отклонение нуля с сохранением 10 Гц, переход
+на 5 Гц, изменение скоростей, готовый сервис `/clear` и список actions.
+Каждое измерение частоты длится 15 секунд. Опция `--defect-checkout` запускает
+также отдельную копию с отключённой проверкой частоты; инструкции — в отчёте.
+Опыт агента использует настоящий turtlesim без окна. Ручную демонстрацию
+студентом и запуск удалённого CI необходимо выполнить отдельно.
+
 ## ПР03: первая нода, поза и команда
 
 [Условие ПР03](https://ros.lms.ci.nsu.ru/practices/pr03) · [Опыт и объяснения](evidence/pr03/demo.md) · [Тесты](evidence/pr03/tests.txt)

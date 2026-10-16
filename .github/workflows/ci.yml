@@ -1,4 +1,4 @@
-name: PR03 patrol and evidence
+name: PR04 patrol and evidence
 
 on: [push, pull_request]
 
@@ -10,7 +10,7 @@ env:
   COURSE_KIT_SHA256: 6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe
 
 jobs:
-  pr03:
+  pr04:
     runs-on: ubuntu-latest
     container:
       image: osrf/ros:jazzy-desktop-full@sha256:d16957210572c5f919f3f9bd2fb0cc24a82542647489d8b8eda7c3beda31305f
@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build and test PR03 packages
+      - name: Build and test PR04 packages
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
@@ -31,12 +31,12 @@ jobs:
       - name: Download pinned course kit
         shell: bash
         run: |
-          kit_archive="$RUNNER_TEMP/pr03-course-kit.tar.gz"
+          kit_archive="$RUNNER_TEMP/pr04-course-kit.tar.gz"
           curl -fsSLo "$kit_archive" "$COURSE_KIT_URL"
           printf '%s  %s\n' "$COURSE_KIT_SHA256" "$kit_archive" | sha256sum -c -
           mkdir -p .course-kit
           tar -xzf "$kit_archive" -C .course-kit
 
-      - name: Check PR03 evidence
+      - name: Check PR04 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+        run: python3 .course-kit/v1/tools/check_practice.py PR04 --submission .

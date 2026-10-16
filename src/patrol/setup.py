@@ -9,7 +9,7 @@ setup(
     ],
     install_requires=['setuptools'], zip_safe=True,
     maintainer='reev1l', maintainer_email='reev1l@users.noreply.github.com',
-    description='Pose subscription and timer-driven Twist publisher for PR03.',
+    description='Pose subscription and timer-driven Twist publisher with runtime parameters for PR03/PR04.',
     license='Apache-2.0',
     entry_points={'console_scripts': ['patrol = patrol.patrol:main']},
 )

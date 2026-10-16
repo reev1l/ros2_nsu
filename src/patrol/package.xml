@@ -2,10 +2,11 @@
 <package format="3">
   <name>patrol</name>
   <version>0.0.0</version>
-  <description>Pose subscription and timer-driven Twist publisher for PR03.</description>
+  <description>Pose subscription and timer-driven Twist publisher with validated runtime parameters for PR03/PR04.</description>
   <maintainer email="reev1l@users.noreply.github.com">reev1l</maintainer>
   <license>Apache-2.0</license>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>rcl_interfaces</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend condition="$ROS_DISTRO == jazzy">turtlesim</exec_depend>
   <exec_depend condition="$ROS_DISTRO != jazzy">turtlesim_msgs</exec_depend>
