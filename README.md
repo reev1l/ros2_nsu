@@ -2,6 +2,34 @@
 
 [Условие ПР01](https://ros.lms.ci.nsu.ru/practices/pr01) · [Порядок сдачи](https://ros.lms.ci.nsu.ru/practices/runbook) · [Комплект курса](https://ros.lms.ci.nsu.ru/course/course-kit)
 
+## ПР03: первая нода, поза и команда
+
+[Условие ПР03](https://ros.lms.ci.nsu.ru/practices/pr03) · [Опыт и объяснения](evidence/pr03/demo.md) · [Тесты](evidence/pr03/tests.txt)
+
+Пакет `src/patrol` содержит ноду `/patrol`: callback сохраняет последнюю позу,
+таймер каждые 0,1 с публикует Twist. До первой позы команда нулевая, после —
+`linear.x=0.5`, `angular.z=0.3`. Выбор команды вынесен в чистую функцию.
+Относительное имя `cmd_vel` намеренно оставлено для опыта с remap.
+Пакет ПР02 сохранён. Поддержаны Pose из `turtlesim_msgs` (Lyrical) и
+`turtlesim` (Jazzy, CI).
+
+```bash
+source /opt/ros/lyrical/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup patrol
+source install/setup.bash
+python3 -m pytest src/patrol/test
+export ROS_DOMAIN_ID=18 # выберите свободный домен
+python3 scripts/run_pr03.py
+python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+```
+
+Скрипт запускает настоящий turtlesim без окна, проверяет разрыв имени,
+исправление remap, частоту команд за 15 секунд и остановку через 1,5 с после
+завершения patrol. Повторный запуск перезаписывает evidence; отчёт нужно
+обновить по результатам. Для защиты повторить опыт с окном по `demo.md`.
+CI собирает оба пакета, запускает тесты функции и checker ПР03; живой опыт
+выполняется локально. Отчёт сдаётся отдельным коммитом после реализации.
+
 ## ПР02: пакет запуска и имя топика
 
 [Условие ПР02](https://ros.lms.ci.nsu.ru/practices/pr02) · [Команды и измерения](evidence/pr02/commands.md) · [Типы сообщений](evidence/pr02/types.md)
