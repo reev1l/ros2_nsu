@@ -1,0 +1,122 @@
+[
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-initial.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 launch turtle_bringup sim.launch.py",
+    "output": "simulator.txt",
+    "pid": 14387
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-simulator.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "output": "pose-type.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "output": "patrol-fixed.txt",
+    "pid": 14471
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 param dump /patrol",
+    "output": "parameters-initial.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic hz /turtle1/cmd_vel",
+    "output": "hz-initial.txt",
+    "pid": 14596
+  },
+  {
+    "command": "ros2 param set /patrol publish_hz 0.0",
+    "output": "zero-rejected.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 param get /patrol publish_hz",
+    "output": "frequency-after-zero.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic hz /turtle1/cmd_vel",
+    "output": "hz-after-zero.txt",
+    "pid": 14683
+  },
+  {
+    "command": "ros2 param set /patrol publish_hz 5.0",
+    "output": "set-five.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic hz /turtle1/cmd_vel",
+    "output": "hz-five.txt",
+    "pid": 14750
+  },
+  {
+    "command": "ros2 param set /patrol linear_speed 0.2",
+    "output": "set-linear_speed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 param set /patrol turn_rate -0.4",
+    "output": "set-turn_rate.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "output": "command-updated.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 param dump /patrol",
+    "output": "parameters-final.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 service call /clear std_srvs/srv/Empty '{}'",
+    "output": "clear-service.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 action list -t",
+    "output": "actions.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-stop.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "python3 -c 'import sys; sys.path.insert(0, '\"'\"'/tmp/ros-pr04-frequency-defect/src/patrol'\"'\"'); from patrol.patrol import main; main()' --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "output": "patrol-defect.txt",
+    "pid": 14954
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-defect.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 param set /patrol publish_hz 0.0",
+    "output": "zero-defect.txt",
+    "exit_code": 124
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-final.txt",
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,13 @@
+diff --git a/src/patrol/patrol/parameters.py b/src/patrol/patrol/parameters.py
+index 9f6e299..b04ad60 100644
+--- a/src/patrol/patrol/parameters.py
++++ b/src/patrol/patrol/parameters.py
+@@ -17,6 +17,8 @@ def validate_settings(settings):
+         ('linear_speed', 0., 1.), ('turn_rate', -1., 1.),
+         ('publish_hz', 1., 30.),
+     ):
++        if name == 'publish_hz':
++            continue  # PR04 experiment: frequency validation intentionally disabled.
+         value = getattr(settings, name)
+         if (isinstance(value, bool) or not isinstance(value, (int, float))
+                 or not math.isfinite(value) or not lower <= value <= upper):

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR04",
+  "commit": "1e1d8e85f3f723634669c857f669db06eef5e0b9",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash",
+    "colcon build --symlink-install --packages-select turtle_bringup patrol",
+    "source install/setup.bash",
+    "ROS_DOMAIN_ID=19 python3 -m pytest src/patrol/test",
+    "ROS_DOMAIN_ID=19 python3 scripts/run_pr04.py --defect-checkout /tmp/ros-pr04-frequency-defect",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 param dump /patrol",
+    "ros2 topic hz /turtle1/cmd_vel",
+    "ros2 param set /patrol publish_hz 0.0",
+    "ros2 param get /patrol publish_hz",
+    "ros2 topic hz /turtle1/cmd_vel",
+    "ros2 param set /patrol publish_hz 5.0",
+    "ros2 topic hz /turtle1/cmd_vel",
+    "ros2 param set /patrol linear_speed 0.2",
+    "ros2 param set /patrol turn_rate -0.4",
+    "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "ros2 param dump /patrol",
+    "ros2 service call /clear std_srvs/srv/Empty '{}'",
+    "ros2 action list -t",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "python3 -c 'import sys; sys.path.insert(0, '\"'\"'/tmp/ros-pr04-frequency-defect/src/patrol'\"'\"'); from patrol.patrol import main; main()' --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "ros2 node list --no-daemon --spin-time 2",
+    "timeout 8s ros2 param set /patrol publish_hz 0.0",
+    "ros2 node list --no-daemon --spin-time 2"
+  ],
+  "tests": [
+    {
+      "name": "Оба пакета собраны; 23 теста команд, валидации и транзакций параметров прошли",
+      "status": "passed",
+      "evidence": [
+        "build.txt",
+        "tests.txt"
+      ]
+    },
+    {
+      "name": "Исходный поток команд 10 Гц от работающей ноды",
+      "status": "passed",
+      "evidence": [
+        "parameters-initial.txt",
+        "hz-initial.txt"
+      ]
+    },
+    {
+      "name": "Ноль отклонён; параметр остался 10.0, поток сохранил 10 Гц",
+      "status": "passed",
+      "evidence": [
+        "zero-rejected.txt",
+        "frequency-after-zero.txt",
+        "hz-after-zero.txt"
+      ]
+    },
+    {
+      "name": "Допустимое изменение 10→5 Гц применилось без перезапуска; новые скорости в Twist",
+      "status": "passed",
+      "evidence": [
+        "set-five.txt",
+        "hz-five.txt",
+        "command-updated.txt",
+        "parameters-final.txt"
+      ]
+    },
+    {
+      "name": "Сервис /clear вызван, готовое действие /turtle1/rotate_absolute обнаружено",
+      "status": "passed",
+      "evidence": [
+        "clear-service.txt",
+        "actions.txt"
+      ]
+    },
+    {
+      "name": "Ноль без проверки вызывает ZeroDivisionError в отдельном коммите",
+      "status": "passed",
+      "evidence": [
+        "defect.patch",
+        "patrol-defect.txt",
+        "zero-defect.txt",
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "Исправная нода завершилась штатно; после ожидания скорости нулевые, нод не осталось",
+      "status": "passed",
+      "evidence": [
+        "patrol-fixed.txt",
+        "pose-after-stop.txt",
+        "nodes-final.txt"
+      ]
+    }
+  ],
+  "defect": {
+    "reproducer": "Отдельная ветка pr04-frequency-defect, коммит 6ef818013c4efdde0d8e1b8585390d7996b425b1: временно пропущена проверка publish_hz; ros2 param set /patrol publish_hz 0.0 вызывает ZeroDivisionError в 1.0 / candidate.publish_hz. Процесс ноды завершается с кодом 1, CLI не получает ответа и завершается по timeout с кодом 124.",
+    "root_cause": "Непроверенный нулевой параметр доходит до пересоздания таймера и приводит к делению на ноль. В основной ветке чистая функция отклоняет нечисловые, неконечные и выходящие за диапазоны значения до изменения параметров, таймера и активной конфигурации.",
+    "proof_after": "Тот же запрос с 0.0 отклонён с причиной publish_hz must be finite and in [1.0, 30.0]; get возвращает 10.0, частота остаётся 10.0 Гц. Запрос 5.0 принят, измерено 5.0 Гц. Команда после изменения скоростей содержит 0.2 и -0.4, нода не перезапускалась.",
+    "defect_commit": "6ef818013c4efdde0d8e1b8585390d7996b425b1"
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2,
+    "basis": "Норматив из условия: одна лабораторная пара и примерно 2 часа самостоятельной доработки; не заявление о фактических затратах времени или посещении."
+  },
+  "ai_used": true,
+  "execution": {
+    "performed_by": "Codex agent (GPT-6)",
+    "simulator": "Installed turtlesim_node with QT_QPA_PLATFORM=offscreen",
+    "domain": 19,
+    "manual_student_demonstration_completed": false,
+    "remote_ci_run_completed": false
+  }
+}

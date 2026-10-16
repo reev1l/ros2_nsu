@@ -1,0 +1,8 @@
+/patrol:
+  ros__parameters:
+    linear_speed: 0.5
+    publish_hz: 10.0
+    start_type_description_service: true
+    turn_rate: 0.3
+    use_sim_time: false
+

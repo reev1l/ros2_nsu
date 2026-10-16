@@ -1,0 +1,18 @@
+{
+  "domain": 19,
+  "initial_hz": 10.0,
+  "after_zero_hz": 10.0,
+  "changed_hz": 5.0,
+  "after_stop": {
+    "x": 3.13033390045166,
+    "y": 7.460840225219727,
+    "theta": 2.3040294647216797,
+    "linear_velocity": 0.0,
+    "angular_velocity": 0.0
+  },
+  "defect": {
+    "process_exit_code": 1,
+    "parameter_command_exit_code": 124,
+    "failure": "ZeroDivisionError: division by zero"
+  }
+}

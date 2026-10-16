@@ -1,0 +1,10 @@
+[INFO] [launch]: All log files can be found below /tmp/ros-pr04-logs/2026-10-16-11-22-20-250210-terminal-14387
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [turtlesim_node-1]: process started with pid [14407]
+[turtlesim_node-1] [INFO] [1792124540.374534897] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1792124540.380649295] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[turtlesim_node-1] [INFO] [1792124607.889218485] [turtlesim]: Clearing turtlesim.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1792124622.769721793] [rclcpp]: signal_handler(signum=2)
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 14407]
