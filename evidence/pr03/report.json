@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR03",
+  "commit": "aefc84071c798e4b08fa0566ea55d2b59a99331e",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash",
+    "colcon build --symlink-install --packages-select turtle_bringup patrol",
+    "source install/setup.bash",
+    "python3 -m pytest src/patrol/test",
+    "ROS_DOMAIN_ID=18 python3 scripts/run_pr03.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "ros2 run patrol patrol",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 node info /patrol",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "timeout 8s ros2 topic echo /cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "ros2 topic hz /turtle1/cmd_vel",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "ros2 node list --no-daemon --spin-time 2"
+  ],
+  "tests": [
+    {
+      "name": "Оба пакета собраны; три теста чистой функции прошли",
+      "status": "passed",
+      "evidence": [
+        "build.txt",
+        "tests.txt"
+      ]
+    },
+    {
+      "name": "Разрыв имени: издатель /cmd_vel без подписчика, поза не изменилась",
+      "status": "passed",
+      "evidence": [
+        "info-broken.txt",
+        "command-broken.txt",
+        "pose-before-broken.txt",
+        "pose-after-broken.txt"
+      ]
+    },
+    {
+      "name": "Remap связал endpoints; движение восстановилось, частота 10 Гц",
+      "status": "passed",
+      "evidence": [
+        "info-fixed.txt",
+        "command-fixed.txt",
+        "cmd-hz.txt",
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "После остановки patrol и ожидания скорости нулевые; ноды очищены",
+      "status": "passed",
+      "evidence": [
+        "pose-after-stop.txt",
+        "nodes-final.txt"
+      ]
+    }
+  ],
+  "defect": {
+    "reproducer": "ros2 run patrol patrol: /cmd_vel имеет 1 издателя и 0 подписчиков; ненулевой Twist не меняет позу turtlesim.",
+    "root_cause": "Относительный cmd_vel у ноды в корневом namespace разрешается в /cmd_vel. Симулятор подписан на другое полное имя /turtle1/cmd_vel; одинакового типа недостаточно.",
+    "proof_after": "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel: 1 издатель и 1 подписчик, смещение 1.366481, частота 10.0 Гц; после остановки и ожидания 1,5 с обе скорости нулевые."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2,
+    "basis": "Норматив из условия, не заявление о фактическом времени или посещении."
+  },
+  "ai_used": true,
+  "execution": {
+    "performed_by": "Codex agent (GPT-6)",
+    "simulator": "Installed turtlesim_node with QT_QPA_PLATFORM=offscreen",
+    "manual_student_demonstration_completed": false,
+    "remote_ci_run_completed": false
+  }
+}

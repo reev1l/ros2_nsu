@@ -1,0 +1,107 @@
+[
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-initial.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 launch turtle_bringup sim.launch.py",
+    "output": "simulator.txt",
+    "pid": 12575
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-simulator.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic type /turtle1/pose --no-daemon --spin-time 2",
+    "output": "pose-type.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 run patrol patrol",
+    "output": "patrol-broken.txt",
+    "pid": 12691
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node info /patrol",
+    "output": "patrol-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /cmd_vel --verbose",
+    "output": "info-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /turtle1/cmd_vel --verbose",
+    "output": "info-correct-during-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "output": "command-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-before-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-broken.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "output": "patrol-fixed.txt",
+    "pid": 12925
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /turtle1/cmd_vel --verbose",
+    "output": "info-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-before-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "output": "command-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic hz /turtle1/cmd_vel",
+    "output": "cmd-hz.txt",
+    "pid": 13058
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-fixed.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once --no-daemon",
+    "output": "pose-after-stop.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-final.txt",
+    "exit_code": 0
+  }
+]

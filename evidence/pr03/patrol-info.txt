@@ -1,0 +1,21 @@
+/patrol
+  Subscribers:
+    /turtle1/pose: turtlesim_msgs/msg/Pose
+  Publishers:
+    /cmd_vel: geometry_msgs/msg/Twist
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+  Service Servers:
+    /patrol/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /patrol/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /patrol/get_parameters: rcl_interfaces/srv/GetParameters
+    /patrol/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /patrol/list_parameters: rcl_interfaces/srv/ListParameters
+    /patrol/set_parameters: rcl_interfaces/srv/SetParameters
+    /patrol/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:
+

@@ -1,0 +1,48 @@
+{
+  "domain": 18,
+  "pose_type": "turtlesim_msgs/msg/Pose",
+  "broken": {
+    "before": {
+      "x": 5.544444561004639,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "after": {
+      "x": 5.544444561004639,
+      "y": 5.544444561004639,
+      "theta": 0.0,
+      "linear_velocity": 0.0,
+      "angular_velocity": 0.0
+    },
+    "distance": 0.0
+  },
+  "fixed": {
+    "before": {
+      "x": 6.870476722717285,
+      "y": 6.206718921661377,
+      "theta": 0.9215999841690063,
+      "linear_velocity": 0.5,
+      "angular_velocity": 0.30000001192092896
+    },
+    "after": {
+      "x": 5.6723313331604,
+      "y": 5.549666404724121,
+      "theta": 0.07681470364332199,
+      "linear_velocity": 0.5,
+      "angular_velocity": 0.30000001192092896
+    },
+    "distance": 1.3664810223819437
+  },
+  "command_hz": 10.0,
+  "measurement_seconds": 15.364908403999834,
+  "after_stop": {
+    "x": 6.2127556800842285,
+    "y": 5.686057090759277,
+    "theta": 0.4128147065639496,
+    "linear_velocity": 0.0,
+    "angular_velocity": 0.0
+  },
+  "stop_wait_seconds": 1.5
+}
