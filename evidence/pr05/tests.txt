@@ -1,0 +1,48 @@
+Starting >>> patrol
+Starting >>> turtle_bringup
+============================= test session starts ==============================
+platform linux -- Python 3.14.4, pytest-9.0.2, pluggy-1.6.0
+cachedir: /home/reev/Desktop/ROS2/build/turtle_bringup/.pytest_cache
+rootdir: /home/reev/Desktop/ROS2/src/turtle_bringup
+plugins: launch_testing-3.9.8, ament_xmllint-0.20.6, launch_testing_ros-0.29.9, ament_copyright-0.20.6, ament_mypy-0.20.6, ament_flake8-0.20.6, ament_lint-0.20.6, ament_pep257-0.20.6, colcon-core-0.21.3, cov-5.0.0, typeguard-4.4.4
+collected 5 items
+
+test/test_copyright.py s                                                 [ 20%]
+============================= test session starts ==============================
+platform linux -- Python 3.14.4, pytest-9.0.2, pluggy-1.6.0
+cachedir: /home/reev/Desktop/ROS2/build/patrol/.pytest_cache
+rootdir: /home/reev/Desktop/ROS2/src/patrol
+plugins: launch_testing-3.9.8, ament_xmllint-0.20.6, launch_testing_ros-0.29.9, ament_copyright-0.20.6, ament_mypy-0.20.6, ament_flake8-0.20.6, ament_lint-0.20.6, ament_pep257-0.20.6, colcon-core-0.21.3, cov-5.0.0, typeguard-4.4.4
+collected 23 items
+
+test/test_control.py ....                                                [ 17%]
+test/test_parameters.py ................                                 [ 86%]
+test/test_runtime_parameters.py ...                                      [100%]
+
+----- generated xml file: /home/reev/Desktop/ROS2/build/patrol/pytest.xml ------
+============================== 23 passed in 0.51s ==============================
+test/test_flake8.py .                                                    [ 40%]
+Finished <<< patrol [1.67s]
+Starting >>> course_bringup
+============================= test session starts ==============================
+platform linux -- Python 3.14.4, pytest-9.0.2, pluggy-1.6.0
+cachedir: /home/reev/Desktop/ROS2/build/course_bringup/.pytest_cache
+rootdir: /home/reev/Desktop/ROS2/src/course_bringup
+plugins: launch_testing-3.9.8, ament_xmllint-0.20.6, launch_testing_ros-0.29.9, ament_copyright-0.20.6, ament_mypy-0.20.6, ament_flake8-0.20.6, ament_lint-0.20.6, ament_pep257-0.20.6, colcon-core-0.21.3, cov-5.0.0, typeguard-4.4.4
+collected 1 item
+
+test/test_mypy.py .                                                      [ 60%]
+test/test_pep257.py .                                                    [ 80%]
+test/test_delivery.py .                                                  [100%]
+
+- generated xml file: /home/reev/Desktop/ROS2/build/course_bringup/pytest.xml --
+============================== 1 passed in 6.39s ===============================
+Finished <<< course_bringup [7.38s]
+test/test_xmllint.py .                                                   [100%]
+
+- generated xml file: /home/reev/Desktop/ROS2/build/turtle_bringup/pytest.xml --
+========================= 4 passed, 1 skipped in 8.23s =========================
+Finished <<< turtle_bringup [13.9s]
+
+Summary: 3 packages finished [14.1s]
+Summary: 29 tests, 0 errors, 0 failures, 1 skipped

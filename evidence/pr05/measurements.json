@@ -1,0 +1,17 @@
+{
+  "domain": 20,
+  "topic": "/robot_a/sensor_pose",
+  "bag": "evidence/pr05/bag",
+  "pose_type": "turtlesim_msgs/msg/Pose",
+  "live_received": 404,
+  "bag_message_count": 430,
+  "mcap_sha256": "8ef18e99edad8c7bac863cdf00d8b78dbdf9bc4e2a871b87512a5af311067d71",
+  "replay_received": 307,
+  "record_false_verified": true,
+  "live_reliable_exit": 124,
+  "live_best_effort_exit": 0,
+  "replay_reliable_exit": 124,
+  "replay_best_effort_exit": 0,
+  "replay_verified": true,
+  "all_processes_stopped": true
+}

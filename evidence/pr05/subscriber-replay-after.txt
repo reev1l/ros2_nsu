@@ -1,0 +1,8 @@
+[INFO] [1794543788.971336808] [robot_a.pose_subscriber]: Subscribing with reliability=best_effort
+[INFO] [1794543789.014142506] [robot_a.pose_subscriber]: First pose: x=7.041194, y=6.486170
+[INFO] [1794543789.963378883] [robot_a.pose_subscriber]: received=60
+[INFO] [1794543790.964860844] [robot_a.pose_subscriber]: received=122
+[INFO] [1794543791.963095493] [robot_a.pose_subscriber]: received=175
+[INFO] [1794543792.962849733] [robot_a.pose_subscriber]: received=244
+[INFO] [1794543793.962805648] [robot_a.pose_subscriber]: received=307
+[ros2run]: Received signal:  Interrupt

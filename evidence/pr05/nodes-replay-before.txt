@@ -1,0 +1,2 @@
+/robot_a/pose_subscriber
+/rosbag2_player

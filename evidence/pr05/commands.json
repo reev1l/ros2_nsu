@@ -1,0 +1,142 @@
+[
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-initial.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false bag_dir:=/home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "output": "launch-before.txt",
+    "pid": 22924,
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-before.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic list -t --no-daemon --spin-time 2",
+    "output": "topics-before.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic type /robot_a/sensor_pose --no-daemon --spin-time 2",
+    "output": "pose-type.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "output": "live-before-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon",
+    "output": "live-before-echo.txt",
+    "exit_code": 124
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-between.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=best_effort record:=true bag_dir:=/home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "output": "launch-after.txt",
+    "pid": 23222,
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-after.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-after.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "output": "live-after-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once --no-daemon",
+    "output": "live-after-echo.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "output": "cmd-vel.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-before-replay.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 bag info /home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "output": "bag-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 bag play /home/reev/Desktop/ROS2/evidence/pr05/bag --loop --disable-keyboard-controls --qos-profile-overrides-path config/qos-overrides.yaml",
+    "output": "replay.txt",
+    "pid": 23563,
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-player.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable",
+    "output": "subscriber-replay-before.txt",
+    "pid": 23615,
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-replay-before.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "output": "replay-before-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon",
+    "output": "replay-before-echo.txt",
+    "exit_code": 124
+  },
+  {
+    "command": "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort",
+    "output": "subscriber-replay-after.txt",
+    "pid": 23788,
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-replay-after.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "output": "replay-after-info.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once --no-daemon",
+    "output": "replay-after-echo.txt",
+    "exit_code": 0
+  },
+  {
+    "command": "ros2 node list --no-daemon --spin-time 2",
+    "output": "nodes-final.txt",
+    "exit_code": 0
+  }
+]

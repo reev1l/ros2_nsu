@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR05",
+  "commit": "247e525a53862cbe5ca73a5d6a43a0d6c98a70c9",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "source /opt/ros/lyrical/setup.bash",
+    "colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup",
+    "source install/setup.bash",
+    "ROS_DOMAIN_ID=21 ROS_LOG_DIR=/tmp/ros-pr05-test-logs colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "ROS_DOMAIN_ID=20 python3 scripts/run_pr05.py",
+    "ROS_LOG_DIR=/tmp/ros-pr05-logs ros2 launch course_bringup patrol.launch.py --show-args",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false bag_dir:=/home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic list -t --no-daemon --spin-time 2",
+    "ros2 topic type /robot_a/sensor_pose --no-daemon --spin-time 2",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=best_effort record:=true bag_dir:=/home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once --no-daemon",
+    "timeout 8s ros2 topic echo /turtle1/cmd_vel geometry_msgs/msg/Twist --once --no-daemon",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 bag info /home/reev/Desktop/ROS2/evidence/pr05/bag",
+    "ros2 bag play /home/reev/Desktop/ROS2/evidence/pr05/bag --loop --disable-keyboard-controls --qos-profile-overrides-path config/qos-overrides.yaml",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon",
+    "ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability best_effort --once --no-daemon",
+    "ros2 node list --no-daemon --spin-time 2",
+    "python3 .course-kit/v1/tools/check_practice.py PR05 --submission . --json"
+  ],
+  "tests": [
+    {
+      "name": "Три пакета собраны, launch и QoS config установлены",
+      "status": "passed",
+      "evidence": [
+        "build.txt",
+        "launch-arguments.txt"
+      ]
+    },
+    {
+      "name": "colcon: 23 теста patrol, 1 тест DDS-доставки и 4 проверки turtle_bringup прошли; 1 шаблонный copyright пропущен",
+      "status": "passed",
+      "evidence": [
+        "tests.txt"
+      ]
+    },
+    {
+      "name": "Имена нод изолированы в /robot_a; turtlesim глобальный; record=false не запускает recorder и не создаёт bag",
+      "status": "passed",
+      "evidence": [
+        "nodes-before.txt",
+        "topics-before.txt",
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "Живой поток: топик виден, reliable несовместим с best_effort, echo=124 и received=0",
+      "status": "passed",
+      "evidence": [
+        "qos-before.txt",
+        "live-before-info.txt",
+        "live-before-echo.txt",
+        "launch-before.txt"
+      ]
+    },
+    {
+      "name": "Живой поток: best_effort получает позу; команда patrol приходит в /turtle1/cmd_vel",
+      "status": "passed",
+      "evidence": [
+        "qos-after.txt",
+        "live-after-echo.txt",
+        "launch-after.txt",
+        "cmd-vel.txt"
+      ]
+    },
+    {
+      "name": "Launch record=true записал один поток /robot_a/sensor_pose: MCAP, 430 сообщений",
+      "status": "passed",
+      "evidence": [
+        "bag-metadata.yaml",
+        "bag-info.txt",
+        "bag/metadata.yaml"
+      ]
+    },
+    {
+      "name": "Без живых издателей та же MCAP с best_effort override: reliable echo=124, best_effort echo=0; отдельный подписчик получает 307 сообщений по логам",
+      "status": "passed",
+      "evidence": [
+        "nodes-before-replay.txt",
+        "nodes-player.txt",
+        "qos-before.txt",
+        "qos-after.txt",
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "Хэш MCAP не изменился после replay, процессы завершены штатно, финальный граф пуст",
+      "status": "passed",
+      "evidence": [
+        "commands.json",
+        "measurements.json",
+        "nodes-final.txt"
+      ]
+    }
+  ],
+  "defect": {
+    "reproducer": "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false; топик /robot_a/sensor_pose виден. Echo с --qos-reliability reliable не получает сообщения за 8 секунд и завершается с кодом 124; отдельный подписчик пишет received=0. То же повторено на одном bag с best_effort override.",
+    "root_cause": "Relay предлагает BEST_EFFORT, а подписчик запрашивает RELIABLE. Предлагаемая надёжность ниже требуемой, поэтому DDS обнаруживает endpoints, но не связывает их для доставки. Наличие имени и совпадение типа не гарантируют совместимость QoS.",
+    "proof_after": "Изменён только профиль подписчика на best_effort. На живом потоке echo вернул позу с кодом 0, отдельный подписчик получил 404 сообщения по логам. Launch записал один исправленный поток, 430 сообщений в MCAP. После остановки живого launch та же запись с config/qos-overrides.yaml дала код 124 для reliable и 0 для best_effort; исправный подписчик получил 307 сообщений по логам. SHA-256 файла MCAP сохранился."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "replay_verified": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2,
+    "basis": "Норматив из условия: одна лабораторная пара и примерно 2 часа самостоятельной доработки; не заявление о фактических затратах времени или посещении."
+  },
+  "ai_used": true,
+  "execution": {
+    "performed_by": "Codex agent (GPT-6)",
+    "os": "Ubuntu 26.04.1 LTS",
+    "ros_distro": "lyrical",
+    "pose_type": "turtlesim_msgs/msg/Pose",
+    "simulator": "Installed turtlesim_node with QT_QPA_PLATFORM=offscreen",
+    "domain": 20,
+    "test_domain": 21,
+    "manual_student_demonstration_completed": false,
+    "remote_ci_run_completed": false
+  }
+}

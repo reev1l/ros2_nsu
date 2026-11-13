@@ -1,0 +1,17 @@
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'namespace':
+        no description given
+        (default: 'robot_a')
+
+    'record':
+        One of: ['true', 'false']
+        (default: 'false')
+
+    'bag_dir':
+        no description given
+        (default: 'evidence/pr05/bag')
+
+    'subscriber_reliability':
+        One of: ['reliable', 'best_effort']
+        (default: 'best_effort')

@@ -1,0 +1,166 @@
+=== Live topic is visible (topics-before.txt) ===
+$ ros2 topic list -t --no-daemon --spin-time 2
+exit=0
+/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/robot_a/sensor_pose [turtlesim_msgs/msg/Pose]
+/rosout [rcl_interfaces/msg/Log]
+/turtle1/cmd_vel [geometry_msgs/msg/Twist]
+/turtle1/color_sensor [turtlesim_msgs/msg/Color]
+/turtle1/pose [turtlesim_msgs/msg/Pose]
+
+=== Live incompatible endpoints (live-before-info.txt) ===
+$ ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2
+exit=0
+Type: turtlesim_msgs/msg/Pose
+
+Publisher count: 1
+
+Node name: pose_relay
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: PUBLISHER
+GID: 01.0f.62.c4.b3.59.21.19.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (5)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.62.c4.b4.59.3a.59.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+
+=== Live reliable echo: expected timeout (live-before-echo.txt) ===
+$ timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon
+exit=124
+[WARN] [1794543745.593359747] [_ros2cli_23141]: New publisher discovered on topic '/robot_a/sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+!rclpy.ok()
+
+=== Live subscriber receives zero (launch-before.txt) ===
+$ ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false bag_dir:=/home/reev/Desktop/ROS2/evidence/pr05/bag
+exit=0
+[INFO] [launch]: All log files can be found below /tmp/ros-pr05-logs/2026-11-13-11-22-13-948677-terminal-22924
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: namespace=robot_a; record=false; bag_dir=/home/reev/Desktop/ROS2/evidence/pr05/bag; subscriber_reliability=reliable
+[INFO] [turtlesim_node-1]: process started with pid [22961]
+[INFO] [patrol-2]: process started with pid [22962]
+[INFO] [pose_relay-3]: process started with pid [22963]
+[INFO] [pose_subscriber-4]: process started with pid [22964]
+[turtlesim_node-1] [INFO] [1794543734.181385222] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1794543734.196440253] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_subscriber-4] [INFO] [1794543734.522693668] [robot_a.pose_subscriber]: Subscribing with reliability=reliable
+[pose_relay-3] [INFO] [1794543734.558181137] [robot_a.pose_relay]: Publishing sensor_pose with reliability=best_effort
+[pose_subscriber-4] [WARN] [1794543734.631954209] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[pose_relay-3] [WARN] [1794543734.632227649] [robot_a.pose_relay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1794543735.516238695] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543736.515865173] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543737.516129374] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543738.516098640] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543739.515627829] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543740.516390210] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543741.516054494] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543742.516172606] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543743.516248706] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543744.516208549] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543745.516211144] [robot_a.pose_subscriber]: received=0
+[pose_relay-3] [WARN] [1794543745.574564455] [robot_a.pose_relay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1794543746.516417300] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543747.516101319] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543748.516401850] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543749.516141251] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543750.516091564] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543751.516158517] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1794543752.516241689] [robot_a.pose_subscriber]: received=0
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1794543752.698290233] [rclcpp]: signal_handler(signum=2)
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 22961]
+[INFO] [pose_subscriber-4]: process has finished cleanly [pid 22964]
+[INFO] [pose_relay-3]: process has finished cleanly [pid 22963]
+[INFO] [patrol-2]: process has finished cleanly [pid 22962]
+
+=== Replay incompatible endpoints (replay-before-info.txt) ===
+$ ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2
+exit=0
+Type: turtlesim_msgs/msg/Pose
+
+Publisher count: 1
+
+Node name: rosbag2_player
+Node namespace: /
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: PUBLISHER
+GID: 01.0f.62.c4.0b.5c.6e.a0.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.62.c4.59.5c.38.7b.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+
+=== Replay reliable echo: expected timeout (replay-before-echo.txt) ===
+$ timeout 8s ros2 topic echo /robot_a/sensor_pose turtlesim_msgs/msg/Pose --qos-reliability reliable --once --no-daemon
+exit=124
+[WARN] [1794543780.403991273] [_ros2cli_23715]: New publisher discovered on topic '/robot_a/sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+!rclpy.ok()
+
+=== Replay subscriber receives zero (subscriber-replay-before.txt) ===
+$ ros2 run course_bringup pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable
+exit=0
+[INFO] [1794543774.921047796] [robot_a.pose_subscriber]: Subscribing with reliability=reliable
+[WARN] [1794543774.921907444] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[INFO] [1794543775.911397331] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543776.911971166] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543777.911329747] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543778.911855228] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543779.911410560] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543780.911411904] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543781.911408594] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543782.911490059] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543783.911497035] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543784.911366496] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543785.911405174] [robot_a.pose_subscriber]: received=0
+[INFO] [1794543786.911321744] [robot_a.pose_subscriber]: received=0
+[ros2run]: Received signal:  Interrupt

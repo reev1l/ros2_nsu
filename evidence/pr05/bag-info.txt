@@ -1,0 +1,14 @@
+
+Files:             0_bag_2026_11_13-11_22_37.mcap
+Bag size:          34.6 KiB
+Storage id:        mcap
+ROS Distro:        lyrical
+Duration:          6.767744319s
+Start:             Nov 13 2026 11:22:40.724244046 (1794543760.724244046)
+End:               Nov 13 2026 11:22:47.491988365 (1794543767.491988365)
+Messages:          430
+Topic information: Topic: /robot_a/sensor_pose | Type: turtlesim_msgs/msg/Pose | Count: 430 | Serialization Format: cdr
+Services:          0
+Service information: 
+Actions:           0
+Action information: 
