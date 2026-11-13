@@ -1,4 +1,4 @@
-name: PR04 patrol and evidence
+name: PR05 launch, QoS and evidence
 
 on: [push, pull_request]
 
@@ -10,7 +10,7 @@ env:
   COURSE_KIT_SHA256: 6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe
 
 jobs:
-  pr04:
+  pr05:
     runs-on: ubuntu-latest
     container:
       image: osrf/ros:jazzy-desktop-full@sha256:d16957210572c5f919f3f9bd2fb0cc24a82542647489d8b8eda7c3beda31305f
@@ -19,24 +19,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build and test PR04 packages
+      - name: Build and test PR05 packages
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon build --symlink-install --packages-select turtle_bringup patrol
+          colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
           source install/setup.bash
           test -f "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch/sim.launch.py"
-          python3 -m pytest src/patrol/test
+          test -f "$(ros2 pkg prefix course_bringup)/share/course_bringup/launch/patrol.launch.py"
+          cmp config/qos-overrides.yaml "$(ros2 pkg prefix course_bringup)/share/course_bringup/config/qos-overrides.yaml"
+          export ROS_DOMAIN_ID=21
+          colcon test --packages-select patrol course_bringup --event-handlers console_direct+
+          colcon test-result --verbose
 
       - name: Download pinned course kit
         shell: bash
         run: |
-          kit_archive="$RUNNER_TEMP/pr04-course-kit.tar.gz"
+          kit_archive="$RUNNER_TEMP/pr05-course-kit.tar.gz"
           curl -fsSLo "$kit_archive" "$COURSE_KIT_URL"
           printf '%s  %s\n' "$COURSE_KIT_SHA256" "$kit_archive" | sha256sum -c -
           mkdir -p .course-kit
           tar -xzf "$kit_archive" -C .course-kit
 
-      - name: Check PR04 evidence
+      - name: Check PR05 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR04 --submission .
+        run: python3 .course-kit/v1/tools/check_practice.py PR05 --submission .

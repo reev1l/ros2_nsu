@@ -11,5 +11,6 @@ setup(
     maintainer='reev1l', maintainer_email='reev1l@users.noreply.github.com',
     description='Pose subscription and timer-driven Twist publisher with runtime parameters for PR03/PR04.',
     license='Apache-2.0',
+    extras_require={'test': ['pytest']},
     entry_points={'console_scripts': ['patrol = patrol.patrol:main']},
 )

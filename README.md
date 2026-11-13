@@ -2,6 +2,73 @@
 
 [Условие ПР01](https://ros.lms.ci.nsu.ru/practices/pr01) · [Порядок сдачи](https://ros.lms.ci.nsu.ru/practices/runbook) · [Комплект курса](https://ros.lms.ci.nsu.ru/course/course-kit)
 
+## ПР05: launch, QoS и повтор записи
+
+[Условие ПР05](https://ros.lms.ci.nsu.ru/practices/pr05) · [До исправления](evidence/pr05/qos-before.txt) · [После исправления](evidence/pr05/qos-after.txt) · [Измерения](evidence/pr05/measurements.json)
+
+Пакет `src/course_bringup` устанавливает `patrol.launch.py`, `pose_relay`, `pose_subscriber` и конфигурацию QoS. Launch запускает один глобальный `turtlesim`, а `patrol`, relay и подписчика — в `/robot_a`. Внутри нод имена топиков относительные; launch переназначает входы позы в `/turtle1/pose`, выход команды — в `/turtle1/cmd_vel`. Старый запуск `ros2 run patrol patrol` в корневом namespace сохраняет поведение ПР03/ПР04.
+
+Relay публикует `/robot_a/sensor_pose` с `best_effort`. Аргумент `subscriber_reliability` выбирает профиль отдельного подписчика при запуске. С `reliable` топик обнаруживается, но подписчик пишет `received=0`, а CLI echo завершается по таймауту с кодом 124. С `best_effort` сообщения приходят и подписчику, и echo. В `qos-before.txt` и `qos-after.txt` собраны команды, коды возврата, профили endpoints и исходные логи обеих стадий.
+
+В локальном опыте использован свободный домен 20, ROS 2 Lyrical и `turtlesim_msgs/msg/Pose`. Симулятор работал без окна. При `record:=false` recorder и каталог bag не создавались. После исправления launch с `record:=true` записал в MCAP один топик, 430 сообщений. Затем весь живой launch остановлен, и та же запись проиграна с `config/qos-overrides.yaml`: `reliable` снова дал таймаут, `best_effort` получил позу. SHA-256 MCAP до и после replay совпал; финальный список нод пуст.
+
+Сборка, тесты и автоматический опыт:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
+source install/setup.bash
+export ROS_DOMAIN_ID=21 # отдельный свободный домен для тестов
+colcon test --event-handlers console_direct+
+colcon test-result --verbose
+ROS_DOMAIN_ID=20 python3 scripts/run_pr05.py --bag-dir /tmp/pr05-repeat/bag
+```
+
+Для повторного опыта выберите новый, ещё не существующий `bag-dir`. Без аргумента скрипт использует `evidence/pr05/bag` и отказывается перезаписывать существующую запись. Текстовые evidence и измерения перезаписываются: после повтора нужно заново оформить отчёт. Скрипт проверяет пустой домен, изоляцию имён, доставку команд, отсутствие recorder при `false`, несовместимый и исправленный QoS на живом потоке, один поток в MCAP и оба профиля при replay. Созданные процессы завершаются в `finally`.
+
+Тест `src/course_bringup/test/test_delivery.py` поднимает настоящий источник позы, relay и двух подписчиков. Он проверяет сохранение координат при пересылке, получение с `best_effort` и отсутствие сообщений с `reliable`. В `patrol/setup.py` добавлена зависимость pytest для обнаружения прежних 23 тестов через `colcon test`. Локально проверены все три пакета: 29 тестов, 0 ошибок, 0 падений, 1 пропуск — прежний шаблонный тест copyright в `turtle_bringup`.
+
+Для ручной демонстрации откройте два терминала, подключите ROS и `install/setup.bash`, задайте одинаковый свободный `ROS_DOMAIN_ID`. В A:
+
+```bash
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=reliable record:=false
+```
+
+В B проверьте видимость топика и отсутствие доставки:
+
+```bash
+ros2 topic info /robot_a/sensor_pose --verbose
+timeout 8s ros2 topic echo /robot_a/sensor_pose \
+  --qos-reliability reliable --once
+echo "exit=$?" # ожидается 124
+```
+
+Остановите A через Ctrl+C и запустите исправленный вариант с новым каталогом записи:
+
+```bash
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=best_effort \
+  record:=true bag_dir:=/tmp/pr05-demo-bag
+```
+
+В B повторите echo с `--qos-reliability best_effort`: ожидаются координаты и код 0. Дайте recorder записать несколько секунд, затем остановите A через Ctrl+C. В A запустите только replay:
+
+```bash
+ros2 bag play /tmp/pr05-demo-bag --loop \
+  --qos-profile-overrides-path config/qos-overrides.yaml
+```
+
+В B повторите оба варианта echo: `reliable` снова должен дать 124, `best_effort` — сообщение и 0. После проверки остановите player. `--loop` позволяет проверить оба профиля на одной короткой записи. Для Jazzy используется тип `turtlesim/msg/Pose`, для Lyrical — `turtlesim_msgs/msg/Pose`; ноды поддерживают оба варианта.
+
+В сдаче сохранены MCAP, исходный `metadata.yaml`, его копия `evidence/pr05/bag-metadata.yaml`, вывод `ros2 bag info`, результаты сборки и тестов. Отчёт указывает SHA коммита реализации; следующим коммитом добавлены evidence и запись PR05 в `AI_USAGE.md`. Проверка:
+
+```bash
+python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
+```
+
+Workflow собирает три пакета в закреплённом образе Jazzy, запускает `colcon test` для `patrol` и `course_bringup` и checker ПР05. Локальный опыт выполнен агентом; ручная демонстрация студентом и удалённый CI пока не подтверждены.
+
 ## ПР02: пакет запуска и имя топика
 
 [Условие ПР02](https://ros.lms.ci.nsu.ru/practices/pr02) · [Команды и измерения](evidence/pr02/commands.md) · [Типы сообщений](evidence/pr02/types.md)
